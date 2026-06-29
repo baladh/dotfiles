@@ -101,9 +101,13 @@ do
   source $file
 done
 
-# initialize autocomplete here, otherwise functions won't be loaded
+# initialize autocomplete here, otherwise functions won't be loaded.
+# `-u` matches the ZSH_DISABLE_COMPFIX=true posture above: skip the insecure-dir
+# audit (brew leaves /opt/homebrew/share group-writable; not a real concern on a
+# single-user laptop). Without this flag this second compinit call would re-emit
+# the warning that OMZ's first call now suppresses.
 autoload -U compinit
-compinit
+compinit -u
 
 # load every completion after autocomplete loads
 for file in ${(M)config_files:#*/completion.zsh}
